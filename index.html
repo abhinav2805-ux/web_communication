@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROS 2 Button Publisher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .terminal-output {
+            background-color: black;
+            color: lime;
+            padding: 15px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: "Courier New", Courier, monospace;
+            text-align: left;
+            height: 150px;
+            overflow-y: auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0; 
+            display: block; 
+            width: 100%; 
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>ROS 2 Web Communication</h1>
+    <div>
+        <button onclick="sendROSCommand(1)">Save Point</button>
+        <button onclick="sendROSCommand(2)">Execute last path</button>
+        <button onclick="sendROSCommand(3)">Execute whole path</button>
+    </div>
+</div>
+
+<script>
+    var ros = new ROSLIB.Ros({
+        url : 'ws://localhost:9090' 
+    });
+    var buttonPublisher = new ROSLIB.Topic({
+        ros : ros,
+        name : '/button_command',
+        messageType : 'std_msgs/String'
+    });
+
+    function sendROSCommand(command) {
+        var message = new ROSLIB.Message({
+            data: ''
+        });
+        if (command === 1) {
+            message.data = 'sp';
+        } else if (command === 2) {
+            message.data = 'elp';
+        } else if (command === 3) {
+            message.data = 'ewp';
+        } else {
+            message.data = 'Unknown Command';
+        }
+        buttonPublisher.publish(message);
+        document.getElementById('terminalOutput').textContent = 'Sent: ' + message.data;
+    }
+
+    ros.on('connection', function() {
+        console.log('Connected to ROS 2 WebSocket bridge');
+    });
+
+    ros.on('error', function(error) {
+        console.log('Error connecting to ROS 2 WebSocket bridge: ', error);
+    });
+
+    ros.on('close', function() {
+        console.log('Connection to ROS 2 WebSocket bridge closed');
+    });
+</script>
+
+</body>
+</html>

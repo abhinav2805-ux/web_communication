@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "composite": true,  // This must be added
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "ES6", // Or your preferred target
+    "module": "commonjs", // Or your preferred module system
+    "noEmit": false // Ensure this is set to false to allow emitting output
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
