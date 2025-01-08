@@ -23,7 +23,7 @@ const App = () => {
         }
       }, 100);
     }
-    sendROSCommand("new button added");
+    sendROSCommand(`sp_${newButtonName}`);
   };
 
   const openModal = (source: string) => {
@@ -57,13 +57,13 @@ const App = () => {
           Save Point
         </button>
         <button
-          onClick={() => openModal('Execute_Last_Path')}
+          onClick={() => handleButtonClick('Execute_Last_Path')}
           className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-300 shadow-lg transform hover:scale-105"
         >
           Execute Last Path
         </button>
         <button
-          onClick={() => openModal('Execute_Whole_Path')}
+          onClick={() => handleButtonClick('Execute_Whole_Path')}
           className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-300 shadow-lg transform hover:scale-105"
         >
           Execute Whole Path
