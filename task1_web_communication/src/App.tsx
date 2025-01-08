@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Modal from './Model'; // Modal component
 import { useROS } from './useROS'; // Custom hook to manage ROS connection
 
@@ -9,6 +9,36 @@ const App = () => {
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
+  type Button = {
+    buttonType: string;
+    value: string;
+  };
+
+const getAllButtons=async ()=>{
+  const url='http://localhost:5000/getAllButtons';
+  try {
+    const response=await fetch(url);
+    if(!response.ok){
+      throw new Error(`Response status: ${response.status}`)
+    }
+    const res=await response.json()
+    console.log(res.currObject.buttons);
+    
+    const buttonValues = res.currObject.buttons.map((button:Button) => button.value);
+    console.log(buttonValues);
+    
+    setButtons(buttonValues)
+    // console.log(updatedButtons);
+    
+    //setButtons(updatedButtons);
+    
+  } catch (error) {
+    console.log("error",error);
+  }
+}
+ useEffect(()=>{
+  getAllButtons()
+ })
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
   const handleAddButton = () => {
