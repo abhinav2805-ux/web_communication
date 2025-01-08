@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 export const useROS = () => {
+
+  // console.log("using method useROS");
   const [ros, setRos] = useState<ROSLIB.Ros | null>(null);
   const [buttonPublisher, setButtonPublisher] = useState<ROSLIB.Topic | null>(null);
 
@@ -35,31 +37,32 @@ export const useROS = () => {
     setButtonPublisher(publisher);
 
     // Cleanup function to close the connection
-    return () => {
-      if (rosInstance) {
-        rosInstance.close();
-      }
-    };
+    // return () => {
+    //   if (rosInstance) {
+    //     rosInstance.close();
+    //   }
+    // };
   }, []);
 
   // Function to send the ROS command (message) based on the button action
-  const sendROSCommand = (command: number) => {
+  const sendROSCommand = (command: string) => {
     let messageData = '';
-
-    // Map command numbers to button actions
-    switch (command) {
-      case 1:
-        messageData = 'sp'; // Save Point
-        break;
-      case 2:
-        messageData = 'elp'; // Execute Last Path
-        break;
-      case 3:
-        messageData = 'ewp'; // Execute Whole Path
-        break;
-      default:
-        messageData = 'Unknown Command'; // Default for unknown commands
-    }
+    console.log("ros command send: ", command);
+    messageData = command;
+    // // Map command numbers to button actions
+    // switch (command) {
+    //   case 1:
+    //     messageData = 'sp'; // Save Point
+    //     break;
+    //   case 2:
+    //     messageData = 'elp'; // Execute Last Path
+    //     break;
+    //   case 3:
+    //     messageData = 'ewp'; // Execute Whole Path
+    //     break;
+    //   default:
+    //     messageData = 'Unknown Command'; // Default for unknown commands
+    // }
 
     // Send the message to the ROS topic
     if (buttonPublisher) {

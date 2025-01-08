@@ -23,6 +23,7 @@ const App = () => {
         }
       }, 100);
     }
+    sendROSCommand("new button added");
   };
 
   const openModal = (source: string) => {
@@ -37,11 +38,12 @@ const App = () => {
     console.log(`Button clicked: ${buttonName}`);
     // Send the corresponding ROS command when a button is clicked
     if (buttonName === 'Save_Point') {
-      sendROSCommand(1); // sp
+      console.log("Save button clicked from");
+      sendROSCommand("sp"); // sp
     } else if (buttonName === 'Execute_Last_Path') {
-      sendROSCommand(2); // elp
+      sendROSCommand("elp"); // elp
     } else if (buttonName === 'Execute_Whole_Path') {
-      sendROSCommand(3); // ewp
+      sendROSCommand("ewp"); // ewp
     }
   };
 
