@@ -9,6 +9,8 @@ const App = () => {
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const { sendROSCommand } = useROS(); // Use the custom hook here
+
   const getAllButtons = async () => {
     const url = 'http://localhost:5000/getAllButtons';
     try {
@@ -38,57 +40,11 @@ const App = () => {
       const res = await response.json();
       console.log('Removed button:', res.removedButton);
 
-      // Update buttons state
+      // Update buttons state after removing the last button
       setButtons((prevButtons) => prevButtons.slice(0, -1));
     } catch (error) {
       console.log('Error removing button:', error);
     }
-
-    const res=await response.json()
-    console.log(res.currObject.buttons);
-    
-    const buttonValues = res.currObject.buttons.map((button:Button) => button.value);
-    console.log(buttonValues);
-    
-    setButtons(buttonValues)
-    // console.log(updatedButtons);
-    
-    //setButtons(updatedButtons);
-    
-  } catch (error) {
-    console.log("error",error);
-  }
-}
-
-const addButton=async (newButton:Button)=>{
-  const url='http://localhost:5000/addButton';
-  try {
-    const response=await fetch(url,{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newButton)
-    });
-    if(!response.ok){
-      throw new Error(`Response status: ${response.status}`)
-    }
-    const res=await response.json()
-    console.log(res);
-    const newButtons=[...buttons,res.data.value]
-    //console.log(newButtons);
-    
-    setButtons(newButtons)
-  } catch (error) {
-    console.log("error",error);
-  }
-}
-
- useEffect(()=>{
-  getAllButtons()
- },[])
-  const { sendROSCommand } = useROS(); // Use the custom hook here
-
   };
 
   const handleRemoveAllButtons = async () => {
@@ -108,27 +64,52 @@ const addButton=async (newButton:Button)=>{
     }
   };
 
-  const { sendROSCommand } = useROS();
+  const addButton = async (newButton: { value: string; buttonType: string }) => {
+    const url = 'http://localhost:5000/addButton';
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newButton),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const res = await response.json();
+      console.log('Added button:', res);
 
+      // Update buttons state by adding the new button value
+      setButtons((prevButtons) => [...prevButtons, res.data.value]);
+    } catch (error) {
+      console.log('Error adding button:', error);
+    }
+  };
 
   const handleAddButton = () => {
     if (newButtonName.trim() !== '') {
-      const nb:Button={
-        value:`${sourceButton}@${newButtonName}`,
-        buttonType:"save point"
+      const newButton = {
+        value: `${sourceButton}@${newButtonName}`,
+        buttonType: 'save point',
       };
-      // const updatedButtons = [...buttons, `${sourceButton}_${newButtonName}`];
-      // setButtons(updatedButtons);
-      
-      // setNewButtonName('');
-      addButton(nb)
+
+      // Add the new button
+      addButton(newButton);
+
+      // Close the modal and reset the input
       setShowModal(false);
+      setNewButtonName('');
+
+      // Scroll to the bottom of the button list
       setTimeout(() => {
         if (buttonContainerRef.current) {
           buttonContainerRef.current.scrollTop = buttonContainerRef.current.scrollHeight;
         }
       }, 100);
     }
+
+    // Send ROS command
     sendROSCommand(`sp@${newButtonName}`);
   };
 
