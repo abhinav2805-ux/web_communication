@@ -36,24 +36,55 @@ const getAllButtons=async ()=>{
     console.log("error",error);
   }
 }
+
+const addButton=async (newButton:Button)=>{
+  const url='http://localhost:5000/addButton';
+  try {
+    const response=await fetch(url,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newButton)
+    });
+    if(!response.ok){
+      throw new Error(`Response status: ${response.status}`)
+    }
+    const res=await response.json()
+    console.log(res);
+    const newButtons=[...buttons,res.data.value]
+    //console.log(newButtons);
+    
+    setButtons(newButtons)
+  } catch (error) {
+    console.log("error",error);
+  }
+}
+
  useEffect(()=>{
   getAllButtons()
- })
+ },[])
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
   const handleAddButton = () => {
     if (newButtonName.trim() !== '') {
-      const updatedButtons = [...buttons, `${sourceButton}_${newButtonName}`];
-      setButtons(updatedButtons);
+      const nb:Button={
+        value:`${sourceButton}@${newButtonName}`,
+        buttonType:"save point"
+      };
+      // const updatedButtons = [...buttons, `${sourceButton}_${newButtonName}`];
+      // setButtons(updatedButtons);
+      
+      // setNewButtonName('');
+      addButton(nb)
       setShowModal(false);
-      setNewButtonName('');
       setTimeout(() => {
         if (buttonContainerRef.current) {
           buttonContainerRef.current.scrollTop = buttonContainerRef.current.scrollHeight;
         }
       }, 100);
     }
-    sendROSCommand(`sp_${newButtonName}`);
+    sendROSCommand(`sp@${newButtonName}`);
   };
 
   const openModal = (source: string) => {
