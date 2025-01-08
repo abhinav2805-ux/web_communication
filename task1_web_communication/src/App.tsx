@@ -11,106 +11,71 @@ const App = () => {
 
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
-  const getAllButtons = async () => {
-    const url = 'http://localhost:5000/getAllButtons';
+  const fetchButtons = async () => {
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const res = await response.json();
-      const buttonValues = res.currObject.buttons.map((button: { value: string }) => button.value);
+      const response = await fetch('http://localhost:5000/getAllButtons');
+      if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
+      const data = await response.json();
+      const buttonValues = data.currObject.buttons.map((button: { value: string }) => button.value);
       setButtons(buttonValues);
     } catch (error) {
-      console.log('Error fetching buttons:', error);
+      console.error('Error fetching buttons:', error);
     }
   };
 
   useEffect(() => {
-    getAllButtons();
+    fetchButtons();
   }, []);
 
-  const handleRemoveButton = async () => {
-    const url = 'http://localhost:5000/removeButton';
+  const removeButton = async () => {
     try {
-      const response = await fetch(url, { method: 'GET' });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const res = await response.json();
-      console.log('Removed button:', res.removedButton);
-
-      // Update buttons state after removing the last button
-      setButtons((prevButtons) => prevButtons.slice(0, -1));
+      const response = await fetch('http://localhost:5000/removeButton', { method: 'GET' });
+      if (!response.ok) throw new Error(`Failed to remove button: ${response.statusText}`);
+      const { removedButton } = await response.json();
+      console.log('Removed button:', removedButton);
+      setButtons((prev) => prev.slice(0, -1));
     } catch (error) {
-      console.log('Error removing button:', error);
+      console.error('Error removing button:', error);
     }
   };
 
-  const handleRemoveAllButtons = async () => {
-    const url = 'http://localhost:5000/removeAllButtons';
+  const removeAllButtons = async () => {
     try {
-      const response = await fetch(url, { method: 'GET' });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const res = await response.json();
-      console.log(res.message);
-
-      // Clear all buttons in state
+      const response = await fetch('http://localhost:5000/removeAllButtons', { method: 'GET' });
+      if (!response.ok) throw new Error(`Failed to remove all buttons: ${response.statusText}`);
+      const { message } = await response.json();
+      console.log(message);
       setButtons([]);
     } catch (error) {
-      console.log('Error removing all buttons:', error);
+      console.error('Error removing all buttons:', error);
     }
   };
 
   const addButton = async (newButton: { value: string; buttonType: string }) => {
-    const url = 'http://localhost:5000/addButton';
     try {
-      const response = await fetch(url, {
+      const response = await fetch('http://localhost:5000/addButton', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newButton),
       });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const res = await response.json();
-      console.log('Added button:', res);
-
-      // Update buttons state by adding the new button value
-      setButtons((prevButtons) => [...prevButtons, res.data.value]);
+      if (!response.ok) throw new Error(`Failed to add button: ${response.statusText}`);
+      const { data } = await response.json();
+      console.log('Added button:', data);
+      setButtons((prev) => [...prev, data.value]);
     } catch (error) {
-      console.log('Error adding button:', error);
+      console.error('Error adding button:', error);
     }
   };
 
   const handleAddButton = () => {
-    if (newButtonName.trim() !== '') {
-      const newButton = {
-        value: `${sourceButton}@${newButtonName}`,
-        buttonType: 'save point',
-      };
-
-      // Add the new button
+    if (newButtonName.trim()) {
+      const newButton = { value: `${sourceButton}@${newButtonName}`, buttonType: 'save point' };
       addButton(newButton);
-
-      // Close the modal and reset the input
       setShowModal(false);
       setNewButtonName('');
-
-      // Scroll to the bottom of the button list
-      setTimeout(() => {
-        if (buttonContainerRef.current) {
-          buttonContainerRef.current.scrollTop = buttonContainerRef.current.scrollHeight;
-        }
-      }, 100);
+      setTimeout(() => buttonContainerRef.current?.scrollTo(0, buttonContainerRef.current.scrollHeight), 100);
+      sendROSCommand(`sp@${newButtonName}`);
     }
-
-    // Send ROS command
-    sendROSCommand(`sp@${newButtonName}`);
   };
 
   const openModal = (source: string) => {
@@ -118,20 +83,15 @@ const App = () => {
     setShowModal(true);
   };
 
-  const closeModal = () => setShowModal(false);
-  const disableDeleteButtons = buttons.length === 0;
-
   const handleButtonClick = (buttonName: string) => {
     console.log(`Button clicked: ${buttonName}`);
-    if (buttonName === 'Execute_Last_Path') {
-      sendROSCommand('elp');
-    } else if (buttonName === 'Execute_Whole_Path') {
-      sendROSCommand('ewp');
-    }
+    if (buttonName === 'Execute_Last_Path') sendROSCommand('elp');
+    if (buttonName === 'Execute_Whole_Path') sendROSCommand('ewp');
   };
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white font-sans">
+      {/* Sidebar */}
       <div className="w-1/4 p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
         <h1 className="text-3xl font-bold text-center text-cyan-400 mb-6">Robot Controls</h1>
         <button
@@ -154,11 +114,12 @@ const App = () => {
         </button>
       </div>
 
+      {/* Main Content */}
       <div className="flex-1 h-[750px] p-8 flex flex-col relative">
         <div
           ref={buttonContainerRef}
-          className={`flex-1 overflow-y-auto p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg ${
-            buttons.length === 0 ? 'bg-opacity-70' : 'bg-opacity-90'
+          className={`flex-1 overflow-x-hidden p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg ${
+            buttons.length ? 'bg-opacity-90' : 'bg-opacity-70'
           }`}
         >
           <div className="space-y-4">
@@ -174,21 +135,22 @@ const App = () => {
           </div>
         </div>
 
-        <div className="fixed bottom-10 left-[950px] transform -translate-x-1/2 flex space-x-6 z-10">
+        {/* Remove Buttons */}
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-6 z-10">
           <button
-            disabled={disableDeleteButtons}
-            onClick={handleRemoveButton}
+            disabled={!buttons.length}
+            onClick={removeButton}
             className={`px-6 py-4 rounded-lg text-lg font-semibold ${
-              disableDeleteButtons ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
+              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
             } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
           >
             Remove Last
           </button>
           <button
-            disabled={disableDeleteButtons}
-            onClick={handleRemoveAllButtons}
+            disabled={!buttons.length}
+            onClick={removeAllButtons}
             className={`px-6 py-4 rounded-lg text-lg font-semibold ${
-              disableDeleteButtons ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
+              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
             } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
           >
             Remove All
@@ -196,12 +158,13 @@ const App = () => {
         </div>
       </div>
 
+      {/* Modal */}
       {showModal && (
         <Modal
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
-          closeModal={closeModal}
+          closeModal={() => setShowModal(false)}
           sourceButton={sourceButton}
         />
       )}
