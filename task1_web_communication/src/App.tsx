@@ -9,18 +9,41 @@ const App = () => {
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
 
-  type Button = {
-    buttonType: string;
-    value: string;
+  const getAllButtons = async () => {
+    const url = 'http://localhost:5000/getAllButtons';
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const res = await response.json();
+      const buttonValues = res.currObject.buttons.map((button: { value: string }) => button.value);
+      setButtons(buttonValues);
+    } catch (error) {
+      console.log('Error fetching buttons:', error);
+    }
   };
 
-const getAllButtons=async ()=>{
-  const url='http://localhost:5000/getAllButtons';
-  try {
-    const response=await fetch(url);
-    if(!response.ok){
-      throw new Error(`Response status: ${response.status}`)
+  useEffect(() => {
+    getAllButtons();
+  }, []);
+
+  const handleRemoveButton = async () => {
+    const url = 'http://localhost:5000/removeButton';
+    try {
+      const response = await fetch(url, { method: 'GET' });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const res = await response.json();
+      console.log('Removed button:', res.removedButton);
+
+      // Update buttons state
+      setButtons((prevButtons) => prevButtons.slice(0, -1));
+    } catch (error) {
+      console.log('Error removing button:', error);
     }
+
     const res=await response.json()
     console.log(res.currObject.buttons);
     
@@ -66,6 +89,28 @@ const addButton=async (newButton:Button)=>{
  },[])
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
+  };
+
+  const handleRemoveAllButtons = async () => {
+    const url = 'http://localhost:5000/removeAllButtons';
+    try {
+      const response = await fetch(url, { method: 'GET' });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const res = await response.json();
+      console.log(res.message);
+
+      // Clear all buttons in state
+      setButtons([]);
+    } catch (error) {
+      console.log('Error removing all buttons:', error);
+    }
+  };
+
+  const { sendROSCommand } = useROS();
+
+
   const handleAddButton = () => {
     if (newButtonName.trim() !== '') {
       const nb:Button={
@@ -97,11 +142,10 @@ const addButton=async (newButton:Button)=>{
 
   const handleButtonClick = (buttonName: string) => {
     console.log(`Button clicked: ${buttonName}`);
-    // Send the corresponding ROS command when a button is clicked
     if (buttonName === 'Execute_Last_Path') {
-      sendROSCommand("elp"); // elp
+      sendROSCommand('elp');
     } else if (buttonName === 'Execute_Whole_Path') {
-      sendROSCommand("ewp"); // ewp
+      sendROSCommand('ewp');
     }
   };
 
@@ -152,21 +196,21 @@ const addButton=async (newButton:Button)=>{
         <div className="fixed bottom-10 left-[950px] transform -translate-x-1/2 flex space-x-6 z-10">
           <button
             disabled={disableDeleteButtons}
-            onClick={() => setButtons(buttons.slice(0, -1))}
+            onClick={handleRemoveButton}
             className={`px-6 py-4 rounded-lg text-lg font-semibold ${
               disableDeleteButtons ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
             } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
           >
-            Delete Last
+            Remove Last
           </button>
           <button
             disabled={disableDeleteButtons}
-            onClick={() => setButtons([])}
+            onClick={handleRemoveAllButtons}
             className={`px-6 py-4 rounded-lg text-lg font-semibold ${
               disableDeleteButtons ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
             } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
           >
-            Delete All
+            Remove All
           </button>
         </div>
       </div>
