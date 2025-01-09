@@ -15,6 +15,7 @@ const App = () => {
   const [buttons, setButtons] = useState<Button[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [editbtn,seteditbtn] =  useState<Button>();
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +43,7 @@ const App = () => {
 
   useEffect(() => {
     fetchButtons();
-  }, []);
+  }, [buttons]);
 
   const removeButton = async () => {
     try {
@@ -89,7 +90,7 @@ const App = () => {
     if (trimmedName) {
       // Construct the new button object
       const newButton = { 
-        name: `${sourceButton}@${trimmedName}`, 
+        name: `${trimmedName}`, 
         speed: speed, 
         acceleration: acceleration, 
         wait: wait 
@@ -105,7 +106,7 @@ const App = () => {
       sendROSCommand(`sp@${trimmedName}`);
     }
 };
-console.log("hlo");
+
     
   const openModal = (source: string) => {
     setSourceButton(source);
@@ -113,6 +114,8 @@ console.log("hlo");
   };
 
   const openEdit = (source: Button) => {
+    console.log(source);
+    seteditbtn(source);
     setShowEdit(true);
   };
 
@@ -162,7 +165,7 @@ console.log("hlo");
                 onClick={() => openEdit(button)}
                 className="w-full py-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-xl shadow-md transform hover:scale-105 tracking-wide uppercase text-center"
               >
-                {button.name}
+                {`Save_Point@${button.name}`}
               </button>
             ))}
           </div>
@@ -208,6 +211,7 @@ console.log("hlo");
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
           closeModal={() => setShowEdit(false)}
+          data = {editbtn}
         />
       )}
     </div>

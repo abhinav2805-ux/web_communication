@@ -44,8 +44,8 @@ const Modal: React.FC<ModalProps> = ({
     if (validateForm()) {
       handleAddButton({
         name: newButtonName,
-        speed: speed === "" ? 0 : Number(speed), 
-        acceleration: acceleration === "" ? 0 : Number(acceleration), 
+        speed: speed === "" ? 0.1 : Number(speed), 
+        acceleration: acceleration === "" ? 0.1 : Number(acceleration), 
         wait: wait === "" ? 0 : Number(wait),
         id: ""
       });
