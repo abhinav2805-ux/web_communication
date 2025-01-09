@@ -3,7 +3,7 @@ import React, { useState, Dispatch, SetStateAction } from "react";
 type ModalProps = {
   newButtonName: string;
   setNewButtonName: Dispatch<SetStateAction<string>>;
-  handleAddButton: (data: { name: string; speed: number; acceleration: number; wait: number }) => void;
+  handleAddButton: (data: { name: string; speed: number; acceleration: number; wait: number,id:string }) => void;
   closeModal: () => void;
   
 };
@@ -46,7 +46,8 @@ const Modal: React.FC<ModalProps> = ({
         name: newButtonName,
         speed: speed === "" ? 0 : Number(speed), 
         acceleration: acceleration === "" ? 0 : Number(acceleration), 
-        wait: wait === "" ? 0 : Number(wait), 
+        wait: wait === "" ? 0 : Number(wait),
+        id: ""
       });
       resetForm();
       closeModal();

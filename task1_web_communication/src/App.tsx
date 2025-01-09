@@ -4,18 +4,21 @@ import Edit from './Edit';
 import { useROS } from './useROS'; // Custom hook to manage ROS connection
 
 const App = () => {
-  const [buttons, setButtons] = useState<string[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-  const [newButtonName, setNewButtonName] = useState('');
-  const [sourceButton, setSourceButton] = useState('');
-  const buttonContainerRef = useRef<HTMLDivElement | null>(null);
+
   interface Button {
     name: string;
     speed: number;
     acceleration: number;
     wait: number;
+    id:string;
   }
+  const [buttons, setButtons] = useState<Button[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [newButtonName, setNewButtonName] = useState('');
+  const [sourceButton, setSourceButton] = useState('');
+  const buttonContainerRef = useRef<HTMLDivElement | null>(null);
+  
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
   const fetchButtons = async () => {
@@ -23,12 +26,19 @@ const App = () => {
       const response = await fetch('http://localhost:5000/btn/getAllButtons');
       if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
       const data = await response.json();
-      const buttonValues = data.currObject.buttons.map((button: { name: string }) => button.name);
+      const buttonValues = data.currObject.buttons.map((button: { name: string, id: string,speed:number,acceleration:number,wait:number }) => ({
+        name: button.name,
+        id: button.id,
+        acceleration:button.acceleration,
+        speed:button.speed,
+        wait:button.wait// Include the button ID
+      }));
       setButtons(buttonValues);
     } catch (error) {
       console.error('Error fetching buttons:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchButtons();
@@ -68,7 +78,7 @@ const App = () => {
       if (!response.ok) throw new Error(`Failed to add button: ${response.statusText}`);
       const { data } = await response.json();
       console.log('Added button:', data);
-      setButtons((prev) => [...prev, data.name]);
+      setButtons((prev) => [...prev, data]);
     } catch (error) {
       console.error('Error adding button:', error);
     }
@@ -102,8 +112,7 @@ console.log("hlo");
     setShowModal(true);
   };
 
-  const openEdit = (source: string) => {
-    setSourceButton(source);
+  const openEdit = (source: Button) => {
     setShowEdit(true);
   };
 
@@ -153,7 +162,7 @@ console.log("hlo");
                 onClick={() => openEdit(button)}
                 className="w-full py-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-xl shadow-md transform hover:scale-105 tracking-wide uppercase text-center"
               >
-                {button}
+                {button.name}
               </button>
             ))}
           </div>
