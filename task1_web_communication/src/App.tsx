@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Modal from './Model'; // Modal component
+import Edit from './Edit';
 import { useROS } from './useROS'; // Custom hook to manage ROS connection
 
 const App = () => {
   const [buttons, setButtons] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
@@ -100,6 +102,11 @@ console.log("hlo");
     setShowModal(true);
   };
 
+  const openEdit = (source: string) => {
+    setSourceButton(source);
+    setShowEdit(true);
+  };
+
   const handleButtonClick = (buttonName: string) => {
     console.log(`Button clicked: ${buttonName}`);
     if (buttonName === 'Execute_Last_Path') sendROSCommand('elp');
@@ -143,7 +150,7 @@ console.log("hlo");
             {buttons.map((button, index) => (
               <button
                 key={index}
-                onClick={() => handleButtonClick(button)}
+                onClick={() => openEdit(button)}
                 className="w-full py-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-xl shadow-md transform hover:scale-105 tracking-wide uppercase text-center"
               >
                 {button}
@@ -182,6 +189,16 @@ console.log("hlo");
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
           closeModal={() => setShowModal(false)}
+        />
+      )}
+
+      {/* Edit */}
+      {showEdit && (
+        <Edit
+          newButtonName={newButtonName}
+          setNewButtonName={setNewButtonName}
+          handleAddButton={handleAddButton}
+          closeModal={() => setShowEdit(false)}
         />
       )}
     </div>
