@@ -2,20 +2,27 @@ import React, { useState, useRef, useEffect } from 'react';
 import Modal from './Model'; // Modal component
 import Edit from './Edit';
 import { useROS } from './useROS'; // Custom hook to manage ROS connection
+import GripperAdd from './GripperAdd';
 
 const App = () => {
 
   interface Button {
     name: string;
-    speed: number;
-    acceleration: number;
+    speed?: number;
+    acceleration?: number;
     wait: number;
     id:string;
+    state?:number;
+    number?:number;
+    type?:string;
   }
   const [buttons, setButtons] = useState<Button[]>([]);
+  const [gripper, setgripper] = useState<Button[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showgripper, setShowgripper] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [editbtn,seteditbtn] =  useState<Button>();
+  const [gripbtn,setgripeditbtn] =  useState<Button>();
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
@@ -27,12 +34,15 @@ const App = () => {
       const response = await fetch('http://localhost:5000/btn/getAllButtons');
       if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
       const data = await response.json();
-      const buttonValues = data.currObject.buttons.map((button: { name: string, id: string,speed:number,acceleration:number,wait:number }) => ({
+      const buttonValues = data.currObject.buttons.map((button: { name: string, id: string,speed:number,acceleration:number,wait:number,type:string,state:number,number:number, }) => ({
         name: button.name,
         id: button.id,
         acceleration:button.acceleration,
         speed:button.speed,
-        wait:button.wait// Include the button ID
+        wait:button.wait,// Include the button ID
+        type:button.type,
+        state:button.state,
+        number:button.number,
       }));
       setButtons(buttonValues);
     } catch (error) {
@@ -113,6 +123,11 @@ const App = () => {
     setShowModal(true);
   };
 
+  const openGripper = (source: string) => {
+    setShowgripper(true);
+  };
+
+
   const openEdit = (source: Button) => {
     console.log(source);
     seteditbtn(source);
@@ -136,6 +151,14 @@ const App = () => {
         >
           Save Point
         </button>
+
+        <button
+          onClick={() => openGripper('')}
+          className="w-full py-4 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
+        >
+          Gripper Action
+        </button>
+
         <button
           onClick={() => handleButtonClick('Execute_Last_Path')}
           className="w-full py-4 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
@@ -162,7 +185,14 @@ const App = () => {
             {buttons.map((button, index) => (
               <button
                 key={index}
-                onClick={() => openEdit(button)}
+                onClick={() => {
+                  if(button.type!=="Gripper") openEdit(button)
+                
+                  else {
+                    setgripeditbtn(button)
+                    setShowgripper(true)
+                  }
+                }}
                 className="w-full py-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-xl shadow-md transform hover:scale-105 tracking-wide uppercase text-center"
               >
                 {`Save_Point@${button.name}`}
@@ -205,7 +235,7 @@ const App = () => {
       )}
 
       {/* Edit */}
-      {showEdit && (
+      {showEdit && editbtn.type=="button" && (
         <Edit
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}
@@ -214,6 +244,16 @@ const App = () => {
           data = {editbtn}
         />
       )}
+
+     {/* Gripper */}
+{showgripper && (
+  <GripperAdd
+    closeGripper={() => setShowgripper(false)}
+     gripperData={gripbtn} // Close the modal
+  />
+)}
+
+
     </div>
   );
 };
