@@ -18,7 +18,7 @@ const App = () => {
 
   const fetchButtons = async () => {
     try {
-      const response = await fetch('http://localhost:5000/getAllButtons');
+      const response = await fetch('http://localhost:5000/btn/getAllButtons');
       if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
       const data = await response.json();
       const buttonValues = data.currObject.buttons.map((button: { name: string }) => button.name);
@@ -34,7 +34,7 @@ const App = () => {
 
   const removeButton = async () => {
     try {
-      const response = await fetch('http://localhost:5000/removeButton', { method: 'GET' });
+      const response = await fetch('http://localhost:5000/btn/removeButton', { method: 'GET' });
       if (!response.ok) throw new Error(`Failed to remove button: ${response.statusText}`);
       const { removedButton } = await response.json();
       console.log('Removed button:', removedButton);
@@ -46,7 +46,7 @@ const App = () => {
 
   const removeAllButtons = async () => {
     try {
-      const response = await fetch('http://localhost:5000/removeAllButtons', { method: 'GET' });
+      const response = await fetch('http://localhost:5000/btn/removeAllButtons', { method: 'GET' });
       if (!response.ok) throw new Error(`Failed to remove all buttons: ${response.statusText}`);
       const { message } = await response.json();
       console.log(message);
@@ -58,7 +58,7 @@ const App = () => {
 
   const addButton = async (newButton: { name: string; acceleration: number, speed:number, wait:number }) => {
     try {
-      const response = await fetch('http://localhost:5000/addButton', {
+      const response = await fetch('http://localhost:5000/btn/addButton', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newButton),
@@ -182,7 +182,6 @@ console.log("hlo");
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
           closeModal={() => setShowModal(false)}
-          sourceButton={sourceButton}
         />
       )}
     </div>

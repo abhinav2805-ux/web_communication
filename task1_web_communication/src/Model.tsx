@@ -5,7 +5,7 @@ type ModalProps = {
   setNewButtonName: Dispatch<SetStateAction<string>>;
   handleAddButton: (data: { name: string; speed: number; acceleration: number; wait: number }) => void;
   closeModal: () => void;
-  sourceButton: string;
+  
 };
 
 const Modal: React.FC<ModalProps> = ({
