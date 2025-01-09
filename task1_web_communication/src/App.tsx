@@ -8,7 +8,12 @@ const App = () => {
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
-
+  interface Button {
+    name: string;
+    speed: number;
+    acceleration: number;
+    wait: number;
+  }
   const { sendROSCommand } = useROS(); // Use the custom hook here
 
   const fetchButtons = async () => {
@@ -16,7 +21,7 @@ const App = () => {
       const response = await fetch('http://localhost:5000/getAllButtons');
       if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
       const data = await response.json();
-      const buttonValues = data.currObject.buttons.map((button: { value: string }) => button.value);
+      const buttonValues = data.currObject.buttons.map((button: { name: string }) => button.name);
       setButtons(buttonValues);
     } catch (error) {
       console.error('Error fetching buttons:', error);
@@ -51,7 +56,7 @@ const App = () => {
     }
   };
 
-  const addButton = async (newButton: { value: string; buttonType: string }) => {
+  const addButton = async (newButton: { name: string; acceleration: number, speed:number, wait:number }) => {
     try {
       const response = await fetch('http://localhost:5000/addButton', {
         method: 'POST',
@@ -61,23 +66,35 @@ const App = () => {
       if (!response.ok) throw new Error(`Failed to add button: ${response.statusText}`);
       const { data } = await response.json();
       console.log('Added button:', data);
-      setButtons((prev) => [...prev, data.value]);
+      setButtons((prev) => [...prev, data.name]);
     } catch (error) {
       console.error('Error adding button:', error);
     }
   };
 
-  const handleAddButton = () => {
-    if (newButtonName.trim()) {
-      const newButton = { value: `${sourceButton}@${newButtonName}`, buttonType: 'save point' };
+  const handleAddButton = ({name, speed, acceleration, wait}:Button) => {
+    const trimmedName = name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+    if (trimmedName) {
+      // Construct the new button object
+      const newButton = { 
+        name: `${sourceButton}@${trimmedName}`, 
+        speed: speed, 
+        acceleration: acceleration, 
+        wait: wait 
+      };
+      console.log(newButton);
+      
       addButton(newButton);
       setShowModal(false);
       setNewButtonName('');
       setTimeout(() => buttonContainerRef.current?.scrollTo(0, buttonContainerRef.current.scrollHeight), 100);
-      sendROSCommand(`sp@${newButtonName}`);
+      
+      // Send ROS command using new button name
+      sendROSCommand(`sp@${trimmedName}`);
     }
-  };
-
+};
+console.log("hlo");
+    
   const openModal = (source: string) => {
     setSourceButton(source);
     setShowModal(true);
