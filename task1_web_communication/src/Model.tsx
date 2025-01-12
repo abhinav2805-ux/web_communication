@@ -24,6 +24,10 @@ const Modal: React.FC<ModalProps> = ({
       setError("Name is required.");
       return false;
     }
+    if (/\s/.test(newButtonName)) {
+      setError("Name cannot contain spaces.");
+      return false;
+    }
     if (speed !== "" && (speed < 0.1 || speed > 1)) {
       setError("Speed must be a number between 0.1 and 1, if provided.");
       return false;
