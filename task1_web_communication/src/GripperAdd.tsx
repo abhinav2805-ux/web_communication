@@ -4,32 +4,38 @@ type GripperProps = {
   number: number;
   state: number;
   wait: number;
-  id: string; // You need the id for editing
+  id: string;
 };
 
 type GripperAddProps = {
   closeGripper: () => void;
-  gripperData?: GripperProps; // Optional, for editing
+  gripperData?: GripperProps; // Optional for editing
 };
 
 const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) => {
-    // console.log(gripperData);
-    
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [selectedState, setSelectedState] = useState<number>(0);
+  const [selectedState, setSelectedState] = useState<number | null>(null);
   const [wait, setWait] = useState<number>(0);
   const [error, setError] = useState<string>("");
+  const [mode, setMode] = useState<"add" | "edit">("add"); // Default to add
 
-  // Populate state with existing gripper data when editing
+  // Reset form when switching to adding new gripper or editing an existing one
   useEffect(() => {
     if (gripperData) {
+      // When editing, set the state with the existing gripper data
+      setMode("edit");
       setSelectedNumber(gripperData.number);
       setSelectedState(gripperData.state);
       setWait(gripperData.wait);
+    } else {
+      // When adding, reset the state
+      setMode("add");
+      resetForm();
     }
   }, [gripperData]);
 
   const handleSubmit = async () => {
+    // Validate inputs
     if (selectedNumber === null) {
       setError("Number selection is required.");
       return;
@@ -42,20 +48,18 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
 
     const gripperCommand: GripperProps = {
       number: selectedNumber,
-      state: selectedState,
+      state: selectedState ?? 0, // Ensure a default state value if not selected
       wait,
-      id: gripperData?.id || '',
-       // use existing id for edit
+      id: gripperData?.id || "", // Use existing id if editing
     };
 
     try {
-      const url = gripperCommand.id!=''
-        ? `http://localhost:5000/gripper/editGripper` // URL for updating
-        : "http://localhost:5000/gripper/addGripper"; // URL for adding new gripper
+      const url = gripperCommand.id
+        ? `http://localhost:5000/gripper/editGripper` // Edit URL
+        : "http://localhost:5000/gripper/addGripper"; // Add URL
+      const method = gripperCommand.id ? "PUT" : "POST"; // PUT for editing, POST for adding
 
-      const method = gripperCommand.id!='' ? "PUT" : "POST"; // Use PUT for updating, POST for adding
-
-      // Send the request to the server
+      // Send request to server
       const response = await fetch(url, {
         method,
         headers: {
@@ -69,24 +73,27 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
       }
 
       console.log("Gripper successfully saved:", gripperCommand);
-      resetForm();
-      closeGripper();
+      resetForm(); // Reset form after successful submission
+      closeGripper(); // Close the form
+      setMode("add"); 
+      console.log(mode);
+      // Ensure mode is set back to 'add' when the form closes (if adding)
     } catch (error) {
-      console.error("Error saving gripper:");
+      console.error("Error saving gripper:", error);
     }
   };
 
   const resetForm = () => {
-    setSelectedNumber(null);
-    setSelectedState(0);
-    setWait(0);
-    setError("");
+    setSelectedNumber(null); // Reset number
+    setSelectedState(null); // Reset state
+    setWait(0); // Reset wait
+    setError(""); // Clear error message
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg w-[600px]">
-        <h2 className="text-2xl font-semibold mb-4">{gripperData ? "Edit Gripper Command" : "Add Gripper Command"}</h2>
+        <h2 className="text-2xl font-semibold mb-4">{mode === "edit" ? "Edit Gripper Command" : "Add Gripper Command"}</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {/* Number Selection */}
         <div className="mb-4">
@@ -160,7 +167,7 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
             onClick={handleSubmit}
             className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition duration-200"
           >
-            {gripperData ? "Update" : "Submit"}
+            {mode === "edit" ? "Update" : "Submit"}
           </button>
           <button
             onClick={closeGripper}
