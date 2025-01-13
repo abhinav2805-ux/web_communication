@@ -26,8 +26,13 @@ const App = () => {
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
-  
+  const [gripperData, setGripperData] = useState<Button | undefined>(undefined);
   const { sendROSCommand } = useROS(); // Use the custom hook here
+
+
+  const resetGripperData = () => {
+    setgripeditbtn(undefined); // Reset gripperData
+  };
 
   const fetchButtons = async () => {
     try {
@@ -249,7 +254,8 @@ const App = () => {
 {showgripper && (
   <GripperAdd
     closeGripper={() => setShowgripper(false)}
-     gripperData={gripbtn} // Close the modal
+     gripperData={gripbtn}
+     resetGripperData={resetGripperData} // Close the modal
   />
 )}
 

@@ -10,29 +10,28 @@ type GripperProps = {
 type GripperAddProps = {
   closeGripper: () => void;
   gripperData?: GripperProps; // Optional for editing
+  resetGripperData: () => void; // Function to reset gripper data
 };
 
-const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) => {
+const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData, resetGripperData }) => {
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [selectedState, setSelectedState] = useState<number | null>(null);
   const [wait, setWait] = useState<number>(0);
   const [error, setError] = useState<string>("");
-  const [mode, setMode] = useState<"add" | "edit">("add"); // Default to add
+  const [mode, setMode] = useState<"add" | "edit">("add");
 
   // Reset form when switching to adding new gripper or editing an existing one
   useEffect(() => {
     if (gripperData) {
-      // When editing, set the state with the existing gripper data
       setMode("edit");
       setSelectedNumber(gripperData.number);
       setSelectedState(gripperData.state);
       setWait(gripperData.wait);
     } else {
-      // When adding, reset the state
       setMode("add");
-      resetForm();
+      resetForm(); // Reset form when gripperData is undefined or null
     }
-  }, [gripperData]);
+  }, [gripperData]); // This effect runs when `gripperData` changes
 
   const handleSubmit = async () => {
     // Validate inputs
@@ -71,13 +70,11 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
       if (!response.ok) {
         throw new Error("Failed to save the gripper. Please try again.");
       }
-
       console.log("Gripper successfully saved:", gripperCommand);
+
       resetForm(); // Reset form after successful submission
       closeGripper(); // Close the form
-      setMode("add"); 
-      window.location.reload();
-      // Ensure mode is set back to 'add' when the form closes (if adding)
+      resetGripperData(); // Reset the gripper data in the parent component
     } catch (error) {
       console.error("Error saving gripper:", error);
     }
@@ -182,3 +179,4 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
 };
 
 export default GripperAdd;
+
