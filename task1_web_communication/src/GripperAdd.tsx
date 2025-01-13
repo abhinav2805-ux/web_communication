@@ -76,7 +76,7 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData }) =>
       resetForm(); // Reset form after successful submission
       closeGripper(); // Close the form
       setMode("add"); 
-      
+      window.location.reload();
       // Ensure mode is set back to 'add' when the form closes (if adding)
     } catch (error) {
       console.error("Error saving gripper:", error);
