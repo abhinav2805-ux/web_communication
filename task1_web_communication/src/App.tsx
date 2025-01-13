@@ -6,7 +6,7 @@ const App = () => {
   return (
     <>
       {/* Header */}
-      <div className='min-h-screen'>
+      <div className='h-full'>
       <div className="text-4xl font-bold text-center text-cyan-400 pb-1 pt-2 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         Robot Controls
       </div>

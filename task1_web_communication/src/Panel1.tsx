@@ -144,7 +144,7 @@ const Panel1 = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-full bg-gradient-to-br from-gray-900 via-red-800 to-black text-white font-sans w-full">
+    <div className="flex flex-col md:flex-row h-full border-gray-700 bg-gray-950 text-white font-sans w-full">
       {/* Sidebar */}
       <div className="w-full md:w-1/3 p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
         <button
@@ -181,31 +181,14 @@ const Panel1 = () => {
         >
           Execute Whole Path
         </button>
-        <button
-            disabled={!buttons.length}
-            onClick={removeButton}
-            className={` w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
-              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
-            } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
-          >
-            Remove Last
-          </button>
-          <button
-            disabled={!buttons.length}
-            onClick={removeAllButtons}
-            className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
-              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
-            } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
-          >
-            Remove All
-          </button>
+      
       </div>
 
       {/* Main Content */}
       <div className="flex-1 h-screen flex flex-col relative">
         <div
           ref={buttonContainerRef}
-          className={`flex-1 overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg ${
+          className={`flex-1 overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 h-full rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg ${
             buttons.length ? 'bg-opacity-90' : 'bg-opacity-70'
           }`}
         >
@@ -229,7 +212,26 @@ const Panel1 = () => {
         </div>
 
         {/* Remove Buttons */}
-
+            <div className='flex p-6 justify-around space-x-6'>
+            <button
+            disabled={!buttons.length}
+            onClick={removeButton}
+            className={` w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
+              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
+            } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+          >
+            Remove Last
+          </button>
+          <button
+            disabled={!buttons.length}
+            onClick={removeAllButtons}
+            className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
+              buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
+            } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+          >
+            Remove All
+          </button>
+            </div>
       </div>
 
       {/* Modal */}
