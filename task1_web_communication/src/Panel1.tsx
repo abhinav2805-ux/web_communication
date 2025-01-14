@@ -144,7 +144,7 @@ const Panel1 = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-full border-gray-700 bg-gray-950 text-white font-sans w-full">
+    <div className="flex flex-col md:flex-row max-h-screen border-gray-700 bg-gray-950 text-white font-sans w-full">
       {/* Sidebar */}
       <div className="w-full md:w-1/3 p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
         <button
