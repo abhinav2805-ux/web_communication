@@ -5,7 +5,6 @@ import { useROS } from './useROS'; // Custom hook to manage ROS connection
 import GripperAdd from './GripperAdd';
 
 const Panel1 = () => {
-
   interface Button {
     name: string;
     speed?: number;
@@ -28,7 +27,7 @@ const Panel1 = () => {
   const [sourceButton, setSourceButton] = useState('');
   const buttonContainerRef = useRef<HTMLDivElement | null>(null);
   const [gripperData, setGripperData] = useState<Button | undefined>(undefined);
-  const { sendROSCommand } = useROS(); // Use the custom hook here
+  const { sendROSCommand } = useROS();
 
   const resetGripperData = () => {
     setgripeditbtn(undefined); // Reset gripperData
@@ -44,7 +43,7 @@ const Panel1 = () => {
         id: button.id,
         acceleration: button.acceleration,
         speed: button.speed,
-        wait: button.wait, // Include the button ID
+        wait: button.wait,
         type: button.type,
         state: button.state,
         number: button.number,
@@ -102,7 +101,6 @@ const Panel1 = () => {
   const handleAddButton = ({ name, speed, acceleration, wait }: Button) => {
     const trimmedName = name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
     if (trimmedName) {
-      // Construct the new button object
       const newButton = {
         name: `${trimmedName}`,
         speed: speed,
@@ -116,7 +114,6 @@ const Panel1 = () => {
       setNewButtonName('');
       setTimeout(() => buttonContainerRef.current?.scrollTo(0, buttonContainerRef.current.scrollHeight), 100);
 
-      // Send ROS command using new button name
       sendROSCommand(`sp@${trimmedName}`);
     }
   };
@@ -144,9 +141,9 @@ const Panel1 = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row max-h-screen border-gray-700 bg-gray-950 text-white font-sans w-full">
+    <div className="flex flex-col md:flex-row w-full max-h-screen bg-gray-950 text-white font-sans overflow-hidden">
       {/* Sidebar */}
-      <div className="w-full md:w-1/3 max-h-[90vh] p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
+      <div className="w-full md:w-1/3 p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl max-h-[90vh] overflow-y-auto">
         <button
           onClick={() => openModal('Save_Point')}
           className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
@@ -156,7 +153,7 @@ const Panel1 = () => {
 
         <button
           onClick={() => openGripper('')}
-          className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider "
+          className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
         >
           Gripper Action
         </button>
@@ -170,7 +167,7 @@ const Panel1 = () => {
 
         <button
           onClick={() => handleButtonClick('Execute_Last_Path')}
-          className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider "
+          className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
         >
           Execute Last Path
         </button>
@@ -181,29 +178,25 @@ const Panel1 = () => {
         >
           Execute Whole Path
         </button>
-        
+
         <button
           disabled={!buttons.length}
           onClick={removeButton}
-          className={` w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
-            buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
-          } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+          className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'} transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
           Remove <br />last
         </button>
         <button
           disabled={!buttons.length}
           onClick={removeAllButtons}
-          className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
-            buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
-          } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+          className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'} transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
           Remove All
         </button>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 max-h-[90vh] flex flex-col ">
+      <div className="flex-1 max-h-[90vh] flex flex-col overflow-y-auto">
         <div
           ref={buttonContainerRef}
           className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
@@ -213,7 +206,7 @@ const Panel1 = () => {
               <button
                 key={index}
                 onClick={() => {
-                  if (button.type !== "Gripper") openEdit(button);
+                  if (button.type !== 'Gripper') openEdit(button);
                   else {
                     setgripeditbtn(button);
                     setShowgripper(true);
@@ -239,7 +232,7 @@ const Panel1 = () => {
       )}
 
       {/* Edit */}
-      {showEdit && editbtn.type === "button" && (
+      {showEdit && editbtn?.type === "button" && (
         <Edit
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}

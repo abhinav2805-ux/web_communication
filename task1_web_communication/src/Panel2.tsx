@@ -10,20 +10,14 @@ const Panel2: React.FC = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700 max-h-[90vh] overflow-hidden">
-      <h1 className="text-center text-cyan-400 text-2xl font-bold mb-6">
-        Servo Node Controller
-      </h1>
+    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700 overflow-hidden">
+      <h1 className="text-center text-cyan-400 text-2xl font-bold mb-6">Servo Node Controller</h1>
 
-      {/* Two-column layout with a separator */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 h-full">
-        {/* Column 1: J buttons */}
+        {/* Column 1: Joint buttons */}
         <div className="space-y-6 h-full overflow-y-auto">
           {['J1', 'J2', 'J3', 'J4', 'J5', 'J6'].map((joint) => (
-            <div
-              key={joint}
-              className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300"
-            >
+            <div key={joint} className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300">
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{joint}:</span>
               <div className="flex w-[60%] space-x-3 justify-center">
                 <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform hover:scale-105">
@@ -44,10 +38,7 @@ const Panel2: React.FC = () => {
         {/* Column 2: Axis buttons */}
         <div className="space-y-6 h-full overflow-y-auto">
           {['X', 'Y', 'Z', 'R', 'P', 'W'].map((axis) => (
-            <div
-              key={axis}
-              className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300"
-            >
+            <div key={axis} className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300">
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{axis}:</span>
               <div className="flex w-[60%] space-x-3 justify-center">
                 <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform hover:scale-105">
