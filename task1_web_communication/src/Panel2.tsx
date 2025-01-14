@@ -25,14 +25,15 @@ const Panel2: React.FC = () => {
               className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300"
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{joint}:</span>
-              <div className="flex w-[60%] space-x-3 justify-center">
-                <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform hover:scale-105">
-                  +
-                </button>
-                <span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/4 text-center pt-1">0.0</span>
-                <button className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform hover:scale-105">
-                  -
-                </button>
+              <div className="flex w-[88%] space-x-3 justify-center">
+              <button className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+  +
+</button>
+<span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/6 text-center pt-1">0.0</span>
+<button className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+  -
+</button>
+
               </div>
             </div>
           ))}
@@ -49,14 +50,14 @@ const Panel2: React.FC = () => {
               className="flex items-center p-4 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-lg shadow-md hover:shadow-xl transition ease-in-out duration-300"
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{axis}:</span>
-              <div className="flex w-[60%] space-x-3 justify-center">
-                <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform  hover:scale-105">
-                  +
-                </button>
-                <span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/4 text-center pt-1">0.0</span>
-                <button className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow-sm transition-transform transform hover:scale-105">
-                  -
-                </button>
+              <div className="flex w-[88%] space-x-3 justify-center">
+              <button className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+  +
+</button>
+<span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/6 text-center pt-1">0.0</span>
+<button className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+  -
+</button>
               </div>
             </div>
           ))}
