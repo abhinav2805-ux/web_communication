@@ -203,10 +203,10 @@ const Panel1 = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 h-screen flex flex-col relative">
+      <div className="flex-1 max-h-[90vh] flex flex-col ">
         <div
           ref={buttonContainerRef}
-          className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 h-1/2 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
+          className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
         >
           <div className="space-y-4 h-full">
             {buttons.map((button, index) => (
