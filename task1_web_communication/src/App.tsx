@@ -6,13 +6,13 @@ const App = () => {
   return (
     <>
       {/* Header */}
-      <div className='h-full'>
-      <div className="text-4xl font-bold text-center text-cyan-400 pb-1 pt-2 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <div className='max-h-screen overflow-hidden'>
+      {/* <div className="text-4xl font-bold text-center text-cyan-400 pb-1 pt-2 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         Robot Controls
-      </div>
+      </div> */}
     
       {/* Main Content */}
-      <div className="flex flex-col md:flex-row items-stretch bg-black text-white p-3">
+      <div className="flex flex-col md:flex-row items-stretch bg-black text-white p-[2px]">
         {/* Panel 1: Path Management */}
         <div className="w-full md:w-1/2 md:mr-2">
           <Panel1 />

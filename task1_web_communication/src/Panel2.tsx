@@ -11,7 +11,7 @@ const Panel2: React.FC = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700  h-full">
+    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700  max-h-screen">
       <h1 className="text-center text-cyan-400 text-2xl font-bold mb-6">
         Servo Node Controller
       </h1>
