@@ -4,25 +4,28 @@ import Panel2 from './Panel2';
 
 const App = () => {
   return (
-    <>
+    <div className="min-h-screen bg-gray-950">
       {/* Header */}
-      <div className='h-[100vh] overflow-hidden '>
-        <h1 className='border-r border-gray-700 bg-gray-950 text-center text-5xl text-white font-bold'>Robot Controller</h1>
-        {/* Main Content */}
-        <div className="flex flex-row md:flex-row h-screen bg-black text-white p-1 overflow-y-hidden">
-          {/* Panel 1: Path Management */}
-          <div className="w-full md:w-1/2 flex-shrink-0">
-            <Panel1 />
-          </div>
+      <header className="bg-gray-950 border-b border-gray-700 p-4">
+        <h1 className="text-3xl md:text-5xl text-white font-bold text-center">
+          Robot Controller
+        </h1>
+      </header>
 
-          {/* Panel 2: Servo Node Controller */}
-          <div className="w-full md:w-1/2 flex-shrink-0">
-            <Panel2 />
-          </div>
+      {/* Main Content */}
+      <main className="flex flex-col lg:flex-row h-[calc(100vh-5rem)] overflow-hidden">
+        {/* Panel 1: Path Management */}
+        <div className="w-full lg:w-1/2 h-[50vh] lg:h-full overflow-auto border-b lg:border-b-0 lg:border-r border-gray-700">
+          <Panel1 />
         </div>
-      </div>
-    </>
+
+        {/* Panel 2: Servo Node Controller */}
+        <div className="w-full lg:w-1/2 h-[50vh] lg:h-full overflow-auto">
+          <Panel2 />
+        </div>
+      </main>
+    </div>
   );
-};
+}
 
 export default App;
