@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const Panel2: React.FC = () => {
-  // State to handle toggle button states
   const [toggleStates, setToggleStates] = useState([false, false, false]);
 
   const handleToggle = (index: number) => {
@@ -11,15 +10,15 @@ const Panel2: React.FC = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700  max-h-screen">
+    <div className="w-full p-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white rounded-lg shadow-lg border border-gray-700 max-h-[90vh] overflow-hidden">
       <h1 className="text-center text-cyan-400 text-2xl font-bold mb-6">
         Servo Node Controller
       </h1>
 
       {/* Two-column layout with a separator */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 h-full">
         {/* Column 1: J buttons */}
-        <div className="space-y-6">
+        <div className="space-y-6 h-full overflow-y-auto">
           {['J1', 'J2', 'J3', 'J4', 'J5', 'J6'].map((joint) => (
             <div
               key={joint}
@@ -43,7 +42,7 @@ const Panel2: React.FC = () => {
         <div className="border-l border-gray-700 hidden md:block"></div>
 
         {/* Column 2: Axis buttons */}
-        <div className="space-y-6">
+        <div className="space-y-6 h-full overflow-y-auto">
           {['X', 'Y', 'Z', 'R', 'P', 'W'].map((axis) => (
             <div
               key={axis}

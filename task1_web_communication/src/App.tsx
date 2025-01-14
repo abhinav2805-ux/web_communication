@@ -6,23 +6,20 @@ const App = () => {
   return (
     <>
       {/* Header */}
-      <div className='max-h-screen overflow-hidden'>
-      {/* <div className="text-4xl font-bold text-center text-cyan-400 pb-1 pt-2 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-        Robot Controls
-      </div> */}
-    
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row items-stretch bg-black text-white p-[2px]">
-        {/* Panel 1: Path Management */}
-        <div className="w-full md:w-1/2 md:mr-2">
-          <Panel1 />
-        </div>
+      <div className='h-[100vh] overflow-hidden '>
+        <h1 className='border-r border-gray-700 bg-gray-950 text-center text-5xl text-white font-bold'>Robot Controller</h1>
+        {/* Main Content */}
+        <div className="flex flex-row md:flex-row h-screen bg-black text-white p-1 overflow-y-hidden">
+          {/* Panel 1: Path Management */}
+          <div className="w-full md:w-1/2 flex-shrink-0">
+            <Panel1 />
+          </div>
 
-        {/* Panel 2: Servo Node Controller */}
-        <div className="w-full md:w-1/2">
-          <Panel2 />
+          {/* Panel 2: Servo Node Controller */}
+          <div className="w-full md:w-1/2 flex-shrink-0">
+            <Panel2 />
+          </div>
         </div>
-      </div>
       </div>
     </>
   );
