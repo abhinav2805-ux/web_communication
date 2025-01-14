@@ -26,11 +26,11 @@ const Panel2: React.FC = () => {
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{joint}:</span>
               <div className="flex w-[88%] space-x-3 justify-center">
-              <button className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+              <button className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
   +
 </button>
 <span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/6 text-center pt-1">0.0</span>
-<button className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+<button className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
   -
 </button>
 
@@ -51,11 +51,11 @@ const Panel2: React.FC = () => {
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{axis}:</span>
               <div className="flex w-[88%] space-x-3 justify-center">
-              <button className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+              <button className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
   +
 </button>
 <span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/6 text-center pt-1">0.0</span>
-<button className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
+<button className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105">
   -
 </button>
               </div>

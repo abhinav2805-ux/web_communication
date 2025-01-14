@@ -167,7 +167,10 @@ const GripperAdd: React.FC<GripperAddProps> = ({ closeGripper, gripperData, rese
             {mode === "edit" ? "Update" : "Submit"}
           </button>
           <button
-            onClick={closeGripper}
+            onClick={()=>{
+              resetGripperData();
+              closeGripper();
+            }}
             className="px-6 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition duration-200"
           >
             Cancel
