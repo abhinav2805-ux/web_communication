@@ -198,7 +198,7 @@ const Panel1 = () => {
             buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
           } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
-          Remove All
+          Remove <br /> All
         </button>
       </div>
 

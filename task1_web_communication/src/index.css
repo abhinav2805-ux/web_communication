@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    user-select: none;
+  }
+  /* Customize the scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 2px; /* width of the scrollbar */
+    height: 8px; /* height of the horizontal scrollbar */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #4A90E2; /* color of the scrollbar thumb */
+    border-radius: 5px; /* rounded corners for the thumb */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* color of the track */
+    border-radius: 5px; /* rounded corners for the track */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #357ABD; /* color of the thumb on hover */
+  }
+  
