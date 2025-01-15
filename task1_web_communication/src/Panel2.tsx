@@ -119,9 +119,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '+')}
-                  onMouseDown={() => handleJointButtonPress(joint, '+')}
+                  // onMouseDown={() => handleJointButtonPress(joint, '+')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
-                  onMouseUp={() => handleJointButtonRelease(joint)}
+                  // onMouseUp={() => handleJointButtonRelease(joint)}
                 >
                   +
                 </button>
@@ -131,9 +131,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '-')}
-                  onMouseDown={() => handleJointButtonPress(joint, '-')}
+                  // onMouseDown={() => handleJointButtonPress(joint, '-')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
-                  onMouseUp={() => handleJointButtonRelease(joint)}
+                  // onMouseUp={() => handleJointButtonRelease(joint)}
                 >
                   -
                 </button>
@@ -159,9 +159,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '+')}
-                  onMouseDown={() => handleJointButtonPress(axis, '+')}
+                  // onMouseDown={() => handleJointButtonPress(axis, '+')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
-                  onMouseUp={() => handleJointButtonRelease(axis)}
+                  // onMouseUp={() => handleJointButtonRelease(axis)}
                 >
                   +
                 </button>
@@ -169,9 +169,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '-')}
-                  onMouseDown={() => handleJointButtonPress(axis, '-')}
+                  // onMouseDown={() => handleJointButtonPress(axis, '-')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
-                  onMouseUp={() => handleJointButtonRelease(axis)}
+                  // onMouseUp={() => handleJointButtonRelease(axis)}
                 >
                   -
                 </button>
