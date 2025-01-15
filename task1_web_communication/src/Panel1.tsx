@@ -146,7 +146,7 @@ const Panel1 = () => {
   return (
     <div className="flex flex-col md:flex-row max-h-screen border-gray-700 bg-gray-950 text-white font-sans w-full">
       {/* Sidebar */}
-      <div className="w-full md:w-1/3 max-h-[90vh] p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
+      <div className="w-full md:w-1/2 max-h-[90vh] p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
         <button
           onClick={() => openModal('Save_Point')}
           className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
@@ -189,7 +189,7 @@ const Panel1 = () => {
             buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
           } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
-          Remove <br />last
+          Remove last
         </button>
         <button
           disabled={!buttons.length}
@@ -198,7 +198,7 @@ const Panel1 = () => {
             buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
           } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
-          Remove <br /> All
+          Remove All
         </button>
       </div>
 
@@ -206,9 +206,9 @@ const Panel1 = () => {
       <div className="flex-1 max-h-[90vh] flex flex-col ">
         <div
           ref={buttonContainerRef}
-          className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
+          className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg  backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
         >
-          <div className="space-y-4 h-full">
+          <div className="space-y-3 h-full">
             {buttons.map((button, index) => (
               <button
                 key={index}
@@ -219,9 +219,9 @@ const Panel1 = () => {
                     setShowgripper(true);
                   }
                 }}
-                className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-lg shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
+                className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-md shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
               >
-                {`Save_Point@${button.name}`}
+                {`${button.name}`}
               </button>
             ))}
           </div>

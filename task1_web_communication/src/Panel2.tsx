@@ -115,6 +115,7 @@ const Panel2: React.FC = () => {
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{joint.toUpperCase()}:</span>
               <div className="flex w-[88%] space-x-3 justify-center">
+
                 <button
                   className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '+')}
@@ -136,6 +137,7 @@ const Panel2: React.FC = () => {
                 >
                   -
                 </button>
+
               </div>
             </div>
           ))}
@@ -153,6 +155,7 @@ const Panel2: React.FC = () => {
             >
               <span className="text-lg sm:text-xl font-semibold text-cyan-400 w-1/4">{axis}:</span>
               <div className="flex w-[88%] space-x-3 justify-center">
+
                 <button
                   className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '+')}
@@ -172,6 +175,8 @@ const Panel2: React.FC = () => {
                 >
                   -
                 </button>
+
+
               </div>
             </div>
           ))}
