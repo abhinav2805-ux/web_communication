@@ -3,12 +3,16 @@ import Modal from './Model'; // Modal component
 import Edit from './Edit';
 import { useROS } from './useROS'; // Custom hook to manage ROS connection
 import GripperAdd from './GripperAdd';
+import SavePath from './SavePath';
+import SEdit from './SEdit';
+
 
 const Panel1 = () => {
 
   interface Button {
     name: string;
     speed?: number;
+    Plan_space?: string;
     acceleration?: number;
     wait: number;
     id: string;
@@ -20,9 +24,12 @@ const Panel1 = () => {
   const [buttons, setButtons] = useState<Button[]>([]);
   const [gripper, setgripper] = useState<Button[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showSave, setShowSave] = useState(false);
   const [showgripper, setShowgripper] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showSEdit, setShowSEdit] = useState(false);
   const [editbtn, seteditbtn] = useState<Button>();
+  const [Seditbtn, setSeditbtn] = useState<Button>();
   const [gripbtn, setgripeditbtn] = useState<Button>();
   const [newButtonName, setNewButtonName] = useState('');
   const [sourceButton, setSourceButton] = useState('');
@@ -99,15 +106,36 @@ const Panel1 = () => {
     }
   };
 
-  const handleAddButton = ({ name, speed, acceleration, wait }: Button) => {
+  const handleSaveButton = ({ name,Plan_space, speed, acceleration, wait }: Button) => {
     const trimmedName = name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
     if (trimmedName) {
       // Construct the new button object
       const newButton = {
         name: `${trimmedName}`,
+        Plan_space: Plan_space,
         speed: speed,
         acceleration: acceleration,
         wait: wait,
+      };
+      console.log(newButton);
+
+      addButton(newButton);
+      setShowSave(false);
+      setNewButtonName('');
+      setTimeout(() => buttonContainerRef.current?.scrollTo(0, buttonContainerRef.current.scrollHeight), 100);
+
+      // Send ROS command using new button name
+      sendROSCommand(`sp@${trimmedName}`);
+    }
+  };
+
+
+const handleAddButton = ({ name }: Button) => {
+    const trimmedName = name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+    if (trimmedName) {
+      // Construct the new button object
+      const newButton = {
+        name: `${trimmedName}`,
       };
       console.log(newButton);
 
@@ -121,7 +149,17 @@ const Panel1 = () => {
     }
   };
 
-  const openModal = (source: string) => {
+
+
+
+
+
+  const openSave = (source: string) => {
+    setSourceButton(source);
+    setShowSave(true);
+  };
+
+  const openModel = (source: string) => {
     setSourceButton(source);
     setShowModal(true);
   };
@@ -136,6 +174,12 @@ const Panel1 = () => {
     setShowEdit(true);
   };
 
+  const openSedit= (source: Button)=>{
+    console.log(source);
+    setSeditbtn(source);
+    setShowSEdit(true);
+  }
+
   const handleButtonClick = (buttonName: string) => {
     console.log(`Button clicked: ${buttonName}`);
     if (buttonName === 'Save Path') sendROSCommand('SP');
@@ -144,11 +188,11 @@ const Panel1 = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row max-h-screen border-gray-700 bg-gray-950 text-white font-sans w-full">
+    <div className="flex flex-col md:flex-row h-[90vh] border-gray-700 bg-gray-950 text-white font-sans w-full">
       {/* Sidebar */}
       <div className="w-full md:w-1/2 max-h-[90vh] p-4 md:p-8 space-y-6 border-r border-gray-700 bg-gray-950 shadow-xl">
         <button
-          onClick={() => openModal('Save_Point')}
+          onClick={() => openModel('Save_Point')}
           className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
         >
           Save Point
@@ -162,7 +206,7 @@ const Panel1 = () => {
         </button>
 
         <button
-          onClick={() => handleButtonClick('Save Path')}
+          onClick={() => openSave('Save Path')}
           className="w-full py-4 md:py-5 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition ease-in-out duration-300 shadow-xl transform hover:scale-105 uppercase tracking-wider"
         >
           Save Path
@@ -203,40 +247,76 @@ const Panel1 = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 max-h-[90vh] flex flex-col ">
-        <div
-          ref={buttonContainerRef}
-          className="flex-1 max-h-[90vh] overflow-x-hidden p-2 md:p-6 border-2 border-gray-700 rounded-lg  backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
+      <div className="flex-1 max-h-[90vh] flex flex-col space-y-4">
+  {/* Scrollable Section 1 */}
+  <div
+    className="flex-1 max-h-[45vh] overflow-x-hidden overflow-y-auto p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
+  >
+    <div className="space-y-3 h-full">
+      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Section 1</h2>
+      {buttons.map((button, index) => (
+        <button
+          key={index}
+          onClick={() => {
+            if (button.type !== "Gripper") openSedit(button);
+            else {
+              setgripeditbtn(button);
+              setShowgripper(true);
+            }
+          }}
+          className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-md shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
         >
-          <div className="space-y-3 h-full">
-            {buttons.map((button, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  if (button.type !== "Gripper") openEdit(button);
-                  else {
-                    setgripeditbtn(button);
-                    setShowgripper(true);
-                  }
-                }}
-                className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-md shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
-              >
-                {`${button.name}`}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+          {`${button.name}`}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Scrollable Section 2 with Fixed Height */}
+  <div
+    className="h-[40vh] overflow-x-hidden overflow-y-auto p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
+  >
+    <div className="space-y-3 h-full">
+      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Section 2</h2>
+      {buttons.map((button, index) => (
+        <button
+          key={index}
+          onClick={() => {
+            if (button.type !== "Gripper") openEdit(button);
+            else {
+              setgripeditbtn(button);
+              setShowgripper(true);
+            }
+          }}
+          className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-md shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
+        >
+          {`${button.name}`}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+
 
       {/* Modal */}
-      {showModal && (
-        <Modal
+      {showSave && (
+        <SavePath
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}
-          handleAddButton={handleAddButton}
-          closeModal={() => setShowModal(false)}
+          handleSaveButton={handleSaveButton}
+          closeModal={() => setShowSave(false)}
         />
       )}
+
+        {showModal && (
+                <Modal
+                  newButtonName={newButtonName}
+                  setNewButtonName={setNewButtonName}
+                  handleAddButton={handleAddButton}
+                  closeModal={() => setShowModal(false)}
+                />
+              )}  
 
       {/* Edit */}
       {showEdit && editbtn.type === "button" && (
@@ -245,6 +325,16 @@ const Panel1 = () => {
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
           closeModal={() => setShowEdit(false)}
+          data={editbtn}
+        />
+      )}
+
+{showSEdit  && (
+        <SEdit
+          newButtonName={newButtonName}
+          setNewButtonName={setNewButtonName}
+          handleSaveButton={handleSaveButton}
+          closeSedit={() => setShowSEdit(false)}
           data={editbtn}
         />
       )}

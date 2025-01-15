@@ -1,16 +1,13 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 interface Button {
   name: string;
-  speed: number;
-  acceleration: number;
-  wait: number;
-  id: string;
+  id:string
 }
 
 type ModalProps = {
   newButtonName: string;
   setNewButtonName: Dispatch<SetStateAction<string>>;
-  handleAddButton: (data: { name: string; speed: number; acceleration: number; wait: number; id: string }) => void;
+  handleAddButton: (data: { name: string }) => void;
   closeModal: () => void;
   data: Button | undefined;
 };
@@ -21,17 +18,11 @@ const Edit: React.FC<ModalProps> = ({
   data,
   closeModal,
 }) => {
-  const [speed, setSpeed] = useState<number | "">("");
-  const [acceleration, setAcceleration] = useState<number | "">("");
-  const [wait, setWait] = useState<number | 0>(0);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (data) {
       setNewButtonName(data.name || "");
-      setSpeed(data.speed || "");
-      setAcceleration(data.acceleration || "");
-      setWait(data.wait || 0);
     }
   }, [data, setNewButtonName]); // Update state whenever `data` changes
 
@@ -44,18 +35,6 @@ const Edit: React.FC<ModalProps> = ({
       setError("Name cannot contain spaces.");
       return false;
     }
-    if (speed !== "" && (speed < 0.1 || speed > 1)) {
-      setError("Speed must be a number between 0.1 and 1, if provided.");
-      return false;
-    }
-    if (acceleration !== "" && (acceleration < 0.1 || acceleration > 1)) {
-      setError("Acceleration must be a number between 0.1 and 1, if provided.");
-      return false;
-    }
-    if (wait !== 0 && wait < 0) {
-      setError("Wait time must be a non-negative number.");
-      return false;
-    }
     setError("");
     return true;
   };
@@ -64,9 +43,6 @@ const Edit: React.FC<ModalProps> = ({
     if (validateForm()) {
       const updatedData = {
         name: newButtonName,
-        speed: speed === "" ? 0.1 : Number(speed),
-        acceleration: acceleration === "" ? 0.1 : Number(acceleration),
-        wait: wait === 0 ? 0 : Number(wait),
         id: data?.id || "",
       };
 
@@ -95,9 +71,6 @@ const Edit: React.FC<ModalProps> = ({
 
   const resetForm = () => {
     setNewButtonName("");
-    setSpeed("");
-    setAcceleration("");
-    setWait(0);
     setError("");
   };
 
@@ -125,47 +98,7 @@ const Edit: React.FC<ModalProps> = ({
               placeholder="Enter name"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="speed" className="block text-sm font-medium mb-2">
-              Speed (0.1 - 1)
-            </label>
-            <input
-              id="speed"
-              type="number"
-              step="0.1"
-              value={speed}
-              onChange={(e) => setSpeed(e.target.value !== "" ? Number(e.target.value) : "")}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter speed"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="acceleration" className="block text-sm font-medium mb-2">
-              Acceleration (0.1 - 1)
-            </label>
-            <input
-              id="acceleration"
-              type="number"
-              step="0.1"
-              value={acceleration}
-              onChange={(e) => setAcceleration(e.target.value !== "" ? Number(e.target.value) : "")}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter acceleration"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="wait" className="block text-sm font-medium mb-2">
-              Wait Time
-            </label>
-            <input
-              id="wait"
-              type="number"
-              value={wait}
-              onChange={(e) => setWait(e.target.value !== "" ? Number(e.target.value) : 0)}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter wait time"
-            />
-          </div>
+         
         </form>
         <div className="flex justify-between">
           <button

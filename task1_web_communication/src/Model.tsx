@@ -3,7 +3,7 @@ import React, { useState, Dispatch, SetStateAction } from "react";
 type ModalProps = {
   newButtonName: string;
   setNewButtonName: Dispatch<SetStateAction<string>>;
-  handleAddButton: (data: { name: string; speed: number; acceleration: number; wait: number,id:string }) => void;
+  handleAddButton: (data: { name: string}) => void;
   closeModal: () => void;
   
 };
@@ -48,10 +48,6 @@ const Modal: React.FC<ModalProps> = ({
     if (validateForm()) {
       handleAddButton({
         name: newButtonName,
-        speed: speed === "" ? 0.1 : Number(speed), 
-        acceleration: acceleration === "" ? 0.1 : Number(acceleration), 
-        wait: wait === "" ? 0 : Number(wait),
-        id: ""
       });
       resetForm();
       closeModal();
@@ -88,47 +84,6 @@ const Modal: React.FC<ModalProps> = ({
               onChange={(e) => setNewButtonName(e.target.value)}
               className="w-full p-3 rounded-lg bg-gray-700 text-white"
               placeholder="Enter name"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="speed" className="block text-sm font-medium mb-2">
-              Speed (0.1 - 1)
-            </label>
-            <input
-              id="speed"
-              type="number"
-              step="0.1"
-              value={speed}
-              onChange={(e) => setSpeed(e.target.value !== "" ? Number(e.target.value) : "")}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter speed"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="acceleration" className="block text-sm font-medium mb-2">
-              Acceleration (0.1 - 1)
-            </label>
-            <input
-              id="acceleration"
-              type="number"
-              step="0.1"
-              value={acceleration}
-              onChange={(e) => setAcceleration(e.target.value !== "" ? Number(e.target.value) : "")}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter acceleration"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="wait" className="block text-sm font-medium mb-2">
-              Wait Time 
-            </label>
-            <input
-              id="wait"
-              type="number"
-              value={wait}
-              onChange={(e) => setWait(e.target.value !== "" ? Number(e.target.value) : "")}
-              className="w-full p-3 rounded-lg bg-gray-700 text-white"
-              placeholder="Enter wait time"
             />
           </div>
         </form>

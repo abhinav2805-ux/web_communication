@@ -3,19 +3,19 @@ import Panel1 from './Panel1';
 import Panel2 from './Panel2';
 
 const App = () => {
-  useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault(); // Disable the default long-press menu
-    };
+  // useEffect(() => {
+  //   const handleContextMenu = (e: MouseEvent) => {
+  //     e.preventDefault(); // Disable the default long-press menu
+  //   };
 
-    // Attach the event listener to the entire document
-    document.addEventListener('contextmenu', handleContextMenu);
+  //   // Attach the event listener to the entire document
+  //   document.addEventListener('contextmenu', handleContextMenu);
 
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-    };
-  }, []);
+  //   // Cleanup the event listener when the component unmounts
+  //   return () => {
+  //     document.removeEventListener('contextmenu', handleContextMenu);
+  //   };
+  // }, []);
 
   
   return (
