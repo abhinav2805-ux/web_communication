@@ -117,7 +117,7 @@ const Panel2: React.FC = () => {
               <div className="flex w-[88%] space-x-3 justify-center">
 
                 <button
-                  className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
+                  className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '+')}
                   onMouseDown={() => handleJointButtonPress(joint, '+')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
@@ -129,7 +129,7 @@ const Panel2: React.FC = () => {
                   {jointStates[joint]?.toFixed(2) || '0.0'}
                 </span>
                 <button
-                  className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
+                  className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '-')}
                   onMouseDown={() => handleJointButtonPress(joint, '-')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
@@ -157,7 +157,7 @@ const Panel2: React.FC = () => {
               <div className="flex w-[88%] space-x-3 justify-center">
 
                 <button
-                  className="w-32 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
+                  className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '+')}
                   onMouseDown={() => handleJointButtonPress(axis, '+')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
@@ -167,7 +167,7 @@ const Panel2: React.FC = () => {
                 </button>
                 <span className="text-lg sm:text-xl font-semibold text-gray-300 w-1/6 text-center pt-1">0.0</span>
                 <button
-                  className="w-32 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
+                  className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '-')}
                   onMouseDown={() => handleJointButtonPress(axis, '-')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
