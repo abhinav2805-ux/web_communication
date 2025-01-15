@@ -21,13 +21,13 @@ const Panel2: React.FC = () => {
     console.log('Published:', data);
   };
 
-  const ros2PublishCobotState = (data: boolean) => {
-    const message = new ROSLIB.Message({
-      data: data,
-    });
-    cobotPlayPause.publish(message);
-    console.log('Cobot Stop:', data);
-  };
+  // const ros2PublishCobotState = (data: boolean) => {
+  //   const message = new ROSLIB.Message({
+  //     data: data,
+  //   });
+  //   cobotPlayPause.publish(message);
+  //   console.log('Cobot Stop:', data);
+  // };
 
   // Establish ROS connection
   useEffect(() => {
@@ -79,9 +79,9 @@ const Panel2: React.FC = () => {
 
     // Handle ROS play/pause toggle
     const state = newToggleStates[index];
-    if (index === 0) {
-      ros2PublishCobotState(state);
-    }
+    // if (index === 0) {
+    //   ros2PublishCobotState(state);
+    // }
   };
 
   // Handle joint button press
@@ -119,9 +119,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '+')}
-                  onMouseDown={() => handleJointButtonPress(joint, '+')}
+                  // onMouseDown={() => handleJointButtonPress(joint, '+')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
-                  onMouseUp={() => handleJointButtonRelease(joint)}
+                  // onMouseUp={() => handleJointButtonRelease(joint)}
                 >
                   +
                 </button>
@@ -131,9 +131,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(joint, '-')}
-                  onMouseDown={() => handleJointButtonPress(joint, '-')}
+                  // onMouseDown={() => handleJointButtonPress(joint, '-')}
                   onTouchEnd={() => handleJointButtonRelease(joint)}
-                  onMouseUp={() => handleJointButtonRelease(joint)}
+                  // onMouseUp={() => handleJointButtonRelease(joint)}
                 >
                   -
                 </button>
@@ -159,9 +159,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '+')}
-                  onMouseDown={() => handleJointButtonPress(axis, '+')}
+                  // onMouseDown={() => handleJointButtonPress(axis, '+')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
-                  onMouseUp={() => handleJointButtonRelease(axis)}
+                  // onMouseUp={() => handleJointButtonRelease(axis)}
                 >
                   +
                 </button>
@@ -169,9 +169,9 @@ const Panel2: React.FC = () => {
                 <button
                   className="w-48 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-lg rounded shadow-sm transition-transform transform hover:scale-105"
                   onTouchStart={() => handleJointButtonPress(axis, '-')}
-                  onMouseDown={() => handleJointButtonPress(axis, '-')}
+                  // onMouseDown={() => handleJointButtonPress(axis, '-')}
                   onTouchEnd={() => handleJointButtonRelease(axis)}
-                  onMouseUp={() => handleJointButtonRelease(axis)}
+                  // onMouseUp={() => handleJointButtonRelease(axis)}
                 >
                   -
                 </button>
