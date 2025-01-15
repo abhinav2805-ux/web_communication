@@ -109,7 +109,7 @@ const Edit: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg w-[600px]">
-        <h2 className="text-2xl font-semibold mb-4">Enter Robot Command</h2>
+        <h2 className="text-2xl font-semibold mb-4">Edit Robot Command</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form>
           <div className="mb-4">
