@@ -21,13 +21,13 @@ const Panel2: React.FC = () => {
     console.log('Published:', data);
   };
 
-  const ros2PublishCobotState = (data: boolean) => {
-    const message = new ROSLIB.Message({
-      data: data,
-    });
-    cobotPlayPause.publish(message);
-    console.log('Cobot Stop:', data);
-  };
+  // const ros2PublishCobotState = (data: boolean) => {
+  //   const message = new ROSLIB.Message({
+  //     data: data,
+  //   });
+  //   cobotPlayPause.publish(message);
+  //   console.log('Cobot Stop:', data);
+  // };
 
   // Establish ROS connection
   useEffect(() => {
@@ -79,9 +79,9 @@ const Panel2: React.FC = () => {
 
     // Handle ROS play/pause toggle
     const state = newToggleStates[index];
-    if (index === 0) {
-      ros2PublishCobotState(state);
-    }
+    // if (index === 0) {
+    //   ros2PublishCobotState(state);
+    // }
   };
 
   // Handle joint button press
