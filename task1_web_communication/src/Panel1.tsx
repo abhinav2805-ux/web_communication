@@ -103,6 +103,33 @@ const Panel1 = () => {
     }
   };
 
+
+  const removePoint = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/points/removePoint', { method: 'GET' });
+      if (!response.ok) throw new Error(`Failed to remove button: ${response.statusText}`);
+      const { removedButton } = await response.json();
+      console.log('Removed path:', removedButton);
+      setPoints((prev) => prev.slice(0, -1));
+    } catch (error) {
+      console.error('Error removing button:', error);
+    }
+  };
+
+  const removeAllPoint = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/points/removeAllPoints', { method: 'GET' });
+      if (!response.ok) throw new Error(`Failed to remove all path: ${response.statusText}`);
+      const { message } = await response.json();
+      console.log(message);
+      setPoints([]);
+    } catch (error) {
+      console.error('Error removing all path:', error);
+    }
+  };
+
+
+
   const addButton = async (newButton: { name: string; acceleration: number, speed: number, wait: number,plan_space:string }) => {
     try {
       console.log(newButton);
@@ -264,7 +291,7 @@ const handleAddButton = ({ name }: Button) => {
             buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
           } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
-          Remove last
+          Remove last (Path)
         </button>
         <button
           disabled={!buttons.length}
@@ -273,7 +300,26 @@ const handleAddButton = ({ name }: Button) => {
             buttons.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
           } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
         >
-          Remove All
+          Remove All (Path)
+        </button>
+
+        <button
+          disabled={!points.length}
+          onClick={removePoint}
+          className={` w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
+            points.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
+          } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+        >
+          Remove last (point)
+        </button>
+        <button
+          disabled={!points.length}
+          onClick={removeAllPoint}
+          className={`w-full px-6 py-4 rounded-lg text-lg font-semibold break-all ${
+            points.length ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 cursor-not-allowed'
+          } transition ease-in-out duration-300 shadow-lg transform hover:scale-105`}
+        >
+          Remove All (point)
         </button>
       </div>
 
