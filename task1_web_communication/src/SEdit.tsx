@@ -4,7 +4,7 @@ type ModalProps = {
   newButtonName: string;
   setNewButtonName: Dispatch<SetStateAction<string>>;
   handleSaveButton: (data: { name: string; plan_space: string; speed: number; acceleration: number; wait: number; id: string }) => void;
-  closeModal: () => void;
+  closeSedit: () => void;
   data: { name: string; plan_space: string; speed: number; acceleration: number; wait: number; id: string } | undefined;
 };
 
@@ -13,7 +13,7 @@ const SEdit: React.FC<ModalProps> = ({
   setNewButtonName,
   handleSaveButton,
   data,
-  closeModal,
+  closeSedit,
 }) => {
   const [speed, setSpeed] = useState<number | "">("");
   const [acceleration, setAcceleration] = useState<number | "">("");
@@ -67,7 +67,7 @@ const SEdit: React.FC<ModalProps> = ({
         id: data?.id || "",
       });
       resetForm();
-      closeModal();
+      closeSedit();
     }
   };
 
@@ -81,7 +81,7 @@ const SEdit: React.FC<ModalProps> = ({
 
   const handleCancel = () => {
     resetForm();
-    closeModal();
+    closeSedit();
   };
 
   return (
