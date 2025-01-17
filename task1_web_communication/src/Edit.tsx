@@ -47,7 +47,7 @@ const Edit: React.FC<ModalProps> = ({
       };
 
       try {
-        const response = await fetch(`http://localhost:5000/btn/editButton`, {
+        const response = await fetch(`http://localhost:5000/points/editPoint`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

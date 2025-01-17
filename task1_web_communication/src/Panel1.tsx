@@ -12,9 +12,9 @@ const Panel1 = () => {
   interface Button {
     name: string;
     speed?: number;
-    Plan_space?: string;
+    plan_space?: string;
     acceleration?: number;
-    wait: number;
+    wait?: number;
     id: string;
     state?: number;
     number?: number;
@@ -22,6 +22,8 @@ const Panel1 = () => {
   }
 
   const [buttons, setButtons] = useState<Button[]>([]);
+  const [points, setPoints] = useState<Button[]>([]);
+
   const [gripper, setgripper] = useState<Button[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showSave, setShowSave] = useState(false);
@@ -39,14 +41,24 @@ const Panel1 = () => {
 
   const resetGripperData = () => {
     setgripeditbtn(undefined); // Reset gripperData
+    fetchButtons()
   };
 
   const fetchButtons = async () => {
     try {
-      const response = await fetch('http://localhost:5000/btn/getAllButtons');
+      const response = await fetch('http://localhost:5000/path/getAllPaths');
       if (!response.ok) throw new Error(`Failed to fetch buttons: ${response.statusText}`);
       const data = await response.json();
-      const buttonValues = data.currObject.buttons.map((button: { name: string, id: string, speed: number, acceleration: number, wait: number, type: string, state: number, number: number }) => ({
+      console.log(data);
+      if(data.points){
+      const pointValues = data.points.map((button: { name: string, id: string }) => ({
+        name: button.name,
+        id: button.id,
+      }));
+      setPoints(pointValues);
+    }
+    if(data.paths){
+      const buttonValues = data.paths.map((button: { name: string, id: string, speed: number, acceleration: number, wait: number, type: string, state: number, number: number }) => ({
         name: button.name,
         id: button.id,
         acceleration: button.acceleration,
@@ -57,6 +69,7 @@ const Panel1 = () => {
         number: button.number,
       }));
       setButtons(buttonValues);
+    }
     } catch (error) {
       console.error('Error fetching buttons:', error);
     }
@@ -64,14 +77,14 @@ const Panel1 = () => {
 
   useEffect(() => {
     fetchButtons();
-  }, [buttons]);
+  }, []);
 
   const removeButton = async () => {
     try {
-      const response = await fetch('http://localhost:5000/btn/removeButton', { method: 'GET' });
+      const response = await fetch('http://localhost:5000/path/removePath', { method: 'GET' });
       if (!response.ok) throw new Error(`Failed to remove button: ${response.statusText}`);
       const { removedButton } = await response.json();
-      console.log('Removed button:', removedButton);
+      console.log('Removed path:', removedButton);
       setButtons((prev) => prev.slice(0, -1));
     } catch (error) {
       console.error('Error removing button:', error);
@@ -80,19 +93,21 @@ const Panel1 = () => {
 
   const removeAllButtons = async () => {
     try {
-      const response = await fetch('http://localhost:5000/btn/removeAllButtons', { method: 'GET' });
-      if (!response.ok) throw new Error(`Failed to remove all buttons: ${response.statusText}`);
+      const response = await fetch('http://localhost:5000/path/removeAllPaths', { method: 'GET' });
+      if (!response.ok) throw new Error(`Failed to remove all path: ${response.statusText}`);
       const { message } = await response.json();
       console.log(message);
       setButtons([]);
     } catch (error) {
-      console.error('Error removing all buttons:', error);
+      console.error('Error removing all path:', error);
     }
   };
 
-  const addButton = async (newButton: { name: string; acceleration: number, speed: number, wait: number }) => {
+  const addButton = async (newButton: { name: string; acceleration: number, speed: number, wait: number,plan_space:string }) => {
     try {
-      const response = await fetch('http://localhost:5000/btn/addButton', {
+      console.log(newButton);
+      
+      const response = await fetch('http://localhost:5000/path/addPath', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newButton),
@@ -105,14 +120,30 @@ const Panel1 = () => {
       console.error('Error adding button:', error);
     }
   };
-
-  const handleSaveButton = ({ name,Plan_space, speed, acceleration, wait }: Button) => {
+  const addPoint = async (newButton: { name: string }) => {
+    try {
+      console.log(newButton);
+      
+      const response = await fetch('http://localhost:5000/points/addPoint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newButton),
+      });
+      if (!response.ok) throw new Error(`Failed to add point: ${response.statusText}`);
+      const { data } = await response.json();
+      console.log('Added point:', data);
+      setPoints((prev) => [...prev, data]);
+    } catch (error) {
+      console.error('Error adding point:', error);
+    }
+  };
+  const handleSaveButton = ({ name,plan_space, speed, acceleration, wait }: Button) => {
     const trimmedName = name.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
     if (trimmedName) {
       // Construct the new button object
       const newButton = {
         name: `${trimmedName}`,
-        Plan_space: Plan_space,
+        plan_space: plan_space,
         speed: speed,
         acceleration: acceleration,
         wait: wait,
@@ -139,7 +170,7 @@ const handleAddButton = ({ name }: Button) => {
       };
       console.log(newButton);
 
-      addButton(newButton);
+      addPoint(newButton);
       setShowModal(false);
       setNewButtonName('');
       setTimeout(() => buttonContainerRef.current?.scrollTo(0, buttonContainerRef.current.scrollHeight), 100);
@@ -253,16 +284,12 @@ const handleAddButton = ({ name }: Button) => {
     className="flex-1 max-h-[45vh] overflow-x-hidden overflow-y-auto p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
   >
     <div className="space-y-3 h-full">
-      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Section 1</h2>
-      {buttons.map((button, index) => (
+      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Save Point</h2>
+      {points.map((button, index) => (
         <button
           key={index}
           onClick={() => {
-            if (button.type !== "Gripper") openSedit(button);
-            else {
-              setgripeditbtn(button);
-              setShowgripper(true);
-            }
+            openEdit(button);
           }}
           className="w-full py-5 px-4 rounded-lg bg-gray-700 hover:bg-gray-800 transition ease-in-out duration-300 text-md shadow-md transform hover:scale-105 tracking-wide uppercase text-center break-all"
         >
@@ -277,12 +304,17 @@ const handleAddButton = ({ name }: Button) => {
     className="h-[40vh] overflow-x-hidden overflow-y-auto p-2 md:p-6 border-2 border-gray-700 rounded-lg backdrop-blur-lg bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg"
   >
     <div className="space-y-3 h-full">
-      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Section 2</h2>
+      <h2 className="text-lg font-semibold text-cyan-500 mb-4">Path/Gripper</h2>
       {buttons.map((button, index) => (
         <button
           key={index}
           onClick={() => {
-            if (button.type !== "Gripper") openEdit(button);
+            console.log(button.type);
+            
+            if (button.type !== "Gripper"){
+              seteditbtn(button)
+              openSedit(button);
+            }
             else {
               setgripeditbtn(button);
               setShowgripper(true);
@@ -319,22 +351,28 @@ const handleAddButton = ({ name }: Button) => {
               )}  
 
       {/* Edit */}
-      {showEdit && editbtn.type === "button" && (
+      {showEdit && (
         <Edit
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}
           handleAddButton={handleAddButton}
-          closeModal={() => setShowEdit(false)}
+          closeModal={() => {
+            fetchButtons()
+            setShowEdit(false)}
+          }
           data={editbtn}
         />
       )}
 
-{showSEdit  && (
+{showSEdit  && editbtn.type == "path" && (
         <SEdit
           newButtonName={newButtonName}
           setNewButtonName={setNewButtonName}
           handleSaveButton={handleSaveButton}
-          closeSedit={() => setShowSEdit(false)}
+          closeSedit={() => {
+            fetchButtons()
+            setShowSEdit(false)
+          }}
           data={editbtn}
         />
       )}
