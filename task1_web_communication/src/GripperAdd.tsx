@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+// handle with care 
 type GripperProps = {
   number: number;
   state: number;

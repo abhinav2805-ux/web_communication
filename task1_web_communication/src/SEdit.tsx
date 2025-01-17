@@ -56,18 +56,51 @@ const SEdit: React.FC<ModalProps> = ({
     return true;
   };
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
+  //   if (validateForm()) {
+  //     handleSaveButton({
+  //       name: newButtonName,
+  //       plan_space: selectedPlan,
+  //       speed: speed === "" ? 0.1 : Number(speed),
+  //       acceleration: acceleration === "" ? 0.1 : Number(acceleration),
+  //       wait: wait === "" ? 0 : Number(wait),
+  //       id: data?.id || "",
+  //     });
+  //     resetForm();
+  //     closeSedit();
+  //   }
+  // };
+  const handleSubmit = async () => {
     if (validateForm()) {
-      handleSaveButton({
+      const updatedData = {
         name: newButtonName,
-        plan_space: selectedPlan,
-        speed: speed === "" ? 0.1 : Number(speed),
-        acceleration: acceleration === "" ? 0.1 : Number(acceleration),
-        wait: wait === "" ? 0 : Number(wait),
+        speed:speed,
+        acceleration:acceleration,
+        wait:wait,
+        plan_space:selectedPlan,
         id: data?.id || "",
-      });
-      resetForm();
-      closeSedit();
+      };
+
+      try {
+        const response = await fetch(`http://localhost:5000/path/editPath`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        });
+
+        if (response.ok) {
+          console.log("Data updated successfully!");
+          resetForm();
+          closeSedit();
+        } else {
+          const errorText = await response.text();
+          setError(`Error: ${errorText}`);
+        }
+      } catch (error) {
+        setError("An error occurred. Please try again.");
+      }
     }
   };
 
